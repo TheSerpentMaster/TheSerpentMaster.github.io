@@ -1,19 +1,330 @@
 <!DOCTYPE html>
+<html lang="en">
 <head>
-    <script>
-        <alert>welp, sucks to suck!</alert>
-    </script>
-    <script>
-        // Detect browser and OS to tailor the malware
-        var ua = navigator.userAgent;
-        var isWindows = /Windows/.test(ua);
-        var isMac = /Mac/.test(ua);
-        var isLinux = /Linux/.test(ua);
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TheSerpentMaster · Fullstack Developer</title>
+<meta name="description" content="Fullstack developer building Discord bots, AI integrations, autonomous agents, blockchain tooling and trading networks.">
+<meta property="og:title" content="TheSerpentMaster · Fullstack Developer">
+<meta property="og:description" content="Discord bots, AI integration, agents, blockchain and trading networks.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐍</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=IBM+Plex+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0e2b2b;
+    --bg-deep: #0a2020;
+    --line: #25494a;
+    --text: #e6efe9;
+    --muted: #9db8b1;
+    --brass: #d49a3a;
+    --brass-soft: #f0c36e;
+    --display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+    --body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  }
+  @media (prefers-color-scheme: light) {
+    :root {
+      --bg: #eef2ec;
+      --bg-deep: #e2e9e1;
+      --line: #c3d1c6;
+      --text: #142522;
+      --muted: #4d6660;
+      --brass: #9a6410;
+      --brass-soft: #7c4f08;
+    }
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--body);
+    font-size: 1.0625rem;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; }
+  :focus-visible { outline: 2px solid var(--brass); outline-offset: 3px; border-radius: 2px; }
+  .wrap { max-width: 62rem; margin: 0 auto; padding: 0 1.5rem; }
 
-        // payload in payload.js
-    </script>
+  /* Header */
+  header { padding: 1.5rem 0; }
+  header .wrap { display: flex; justify-content: space-between; align-items: center; gap: 1rem; }
+  .mark { font-family: var(--display); font-weight: 700; text-decoration: none; letter-spacing: -0.01em; }
+  nav { display: flex; gap: 1.5rem; font-size: 0.95rem; }
+  nav a { color: var(--muted); text-decoration: none; }
+  nav a:hover { color: var(--text); }
+
+  /* Hero */
+  .hero { position: relative; padding: 5rem 0 6rem; overflow: hidden; }
+  .hero h1 {
+    font-family: var(--display);
+    font-weight: 800;
+    font-size: clamp(3rem, 11vw, 8rem);
+    line-height: 0.95;
+    letter-spacing: -0.04em;
+    max-width: 10ch;
+  }
+  .hero p.lead {
+    margin-top: 2rem;
+    max-width: 34rem;
+    font-size: 1.25rem;
+    color: var(--muted);
+  }
+  .hero p.lead strong { color: var(--text); font-weight: 500; }
+  .actions { margin-top: 2.5rem; display: flex; flex-wrap: wrap; gap: 0.875rem; }
+  .btn {
+    display: inline-block;
+    padding: 0.8rem 1.4rem;
+    font-weight: 500;
+    text-decoration: none;
+    border-radius: 3px;
+    border: 1px solid var(--brass);
+    transition: background 0.15s, color 0.15s;
+  }
+  .btn.primary { background: var(--brass); color: #1a1405; }
+  .btn.primary:hover { background: var(--brass-soft); }
+  .btn.ghost { color: var(--text); }
+  .btn.ghost:hover { background: var(--bg-deep); }
+
+  /* The serpent: one drawn line, once, on load */
+  .serpent {
+    position: absolute;
+    right: -4rem;
+    top: 1rem;
+    width: min(46rem, 90vw);
+    height: auto;
+    opacity: 0.9;
+    pointer-events: none;
+  }
+  .serpent path.body {
+    fill: none;
+    stroke: var(--brass);
+    stroke-width: 10;
+    stroke-linecap: round;
+    stroke-dasharray: 2400;
+    stroke-dashoffset: 2400;
+    animation: draw 2.8s cubic-bezier(.6,.05,.25,1) 0.2s forwards;
+  }
+  .serpent .eye { fill: var(--bg); opacity: 0; animation: blink 0.4s ease 2.8s forwards; }
+  @keyframes draw { to { stroke-dashoffset: 0; } }
+  @keyframes blink { to { opacity: 1; } }
+  @media (max-width: 720px) { .serpent { opacity: 0.35; right: -10rem; } }
+  @media (prefers-reduced-motion: reduce) {
+    .serpent path.body { animation: none; stroke-dashoffset: 0; }
+    .serpent .eye { animation: none; opacity: 1; }
+    html { scroll-behavior: auto; }
+  }
+
+  /* Sections */
+  section { padding: 4.5rem 0; border-top: 1px solid var(--line); }
+  h2 {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+  }
+  .split { display: grid; grid-template-columns: 1fr 2fr; gap: 3rem; }
+  @media (max-width: 760px) { .split { grid-template-columns: 1fr; gap: 1.75rem; } }
+
+  .about p { max-width: 38rem; }
+  .about p + p { margin-top: 1.1rem; }
+  .about p { color: var(--muted); }
+  .about p:first-child { color: var(--text); font-size: 1.15rem; }
+
+  /* Capabilities as a ruled list, not a card grid */
+  dl.skills > div {
+    display: grid;
+    grid-template-columns: 11rem 1fr;
+    gap: 1.5rem;
+    padding: 1.25rem 0;
+    border-bottom: 1px solid var(--line);
+  }
+  dl.skills > div:first-child { padding-top: 0; }
+  dt { font-family: var(--display); font-weight: 700; font-size: 1.1rem; }
+  dd { color: var(--muted); max-width: 32rem; }
+  @media (max-width: 600px) { dl.skills > div { grid-template-columns: 1fr; gap: 0.25rem; } }
+
+  .stack { margin-top: 2.5rem; display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .stack span {
+    font-size: 0.9rem;
+    padding: 0.3rem 0.8rem;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    color: var(--muted);
+  }
+
+  /* Repos, filled from the GitHub API */
+  .repos { list-style: none; }
+  .repos li { border-bottom: 1px solid var(--line); }
+  .repos a {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 0.25rem 1.5rem;
+    padding: 1.1rem 0;
+    text-decoration: none;
+  }
+  .repos a:hover .name { color: var(--brass-soft); }
+  .repos .name { font-family: var(--display); font-weight: 700; font-size: 1.15rem; transition: color 0.15s; }
+  .repos .desc { grid-column: 1; color: var(--muted); font-size: 0.975rem; }
+  .repos .meta { grid-column: 2; grid-row: 1 / span 2; align-self: center; color: var(--muted); font-size: 0.9rem; text-align: right; }
+  .repos-note { color: var(--muted); }
+
+  /* Contact */
+  .contact p { color: var(--muted); max-width: 30rem; margin-top: 1rem; }
+  .links { margin-top: 1.75rem; display: flex; flex-wrap: wrap; gap: 0.875rem; }
+
+  footer { padding: 2rem 0 3rem; border-top: 1px solid var(--line); color: var(--muted); font-size: 0.9rem; }
+  footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; }
+</style>
 </head>
 <body>
-    <h1>You're cooked now!</h1>
-    <h2>How about you be a good boy and watch as your computer dies</
+
+<header>
+  <div class="wrap">
+    <a class="mark" href="#top">TheSerpentMaster</a>
+    <nav aria-label="Primary">
+      <a href="#about">About</a>
+      <a href="#work">Work</a>
+      <a href="#projects">Projects</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <div class="hero">
+    <svg class="serpent" viewBox="0 0 700 420" aria-hidden="true" focusable="false">
+      <path class="body" d="M40 380 C 160 380, 200 300, 120 250 S 90 140, 230 130 S 400 230, 330 300 S 330 390, 470 340 S 640 220, 560 140 S 470 60, 520 40"/>
+      <circle class="eye" cx="522" cy="40" r="4"/>
+    </svg>
+    <div class="wrap">
+      <h1>The Serpent Master</h1>
+      <p class="lead">Fullstack developer. I build <strong>Discord bots</strong>, <strong>AI-powered agents</strong> and <strong>trading and blockchain systems</strong>, from the database to the interface.</p>
+      <div class="actions">
+        <a class="btn primary" href="https://github.com/TheSerpentMaster" rel="noopener">View GitHub</a>
+        <a class="btn ghost" href="#contact">Get in touch</a>
+      </div>
+    </div>
+  </div>
+
+  <section id="about" class="about">
+    <div class="wrap split">
+      <h2>About</h2>
+      <div>
+        <p>Hi, I'm Sam. I turn ideas into software that runs without supervision: bots that moderate and serve communities, agents that make decisions, and networks that move money quickly and safely.</p>
+        <p>I work across the full stack: backend services and APIs, databases, real-time systems and the front ends people actually use. I also edit video and motion content, so the things I ship look as good as they work.</p>
+        <p>Based wherever the project is. Available for freelance and collaboration.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="work">
+    <div class="wrap split">
+      <h2>What I build</h2>
+      <div>
+        <dl class="skills">
+          <div><dt>Discord bots</dt><dd>Moderation, economy, ticketing, dashboards and slash-command apps built to stay online under heavy load.</dd></div>
+          <div><dt>AI integration</dt><dd>LLM features wired into real products: chat, retrieval, summarization, content generation and tool use.</dd></div>
+          <div><dt>Agents</dt><dd>Autonomous workflows that plan, call tools, recover from errors and report back.</dd></div>
+          <div><dt>Blockchain</dt><dd>Wallet integrations, on-chain data pipelines, token tooling and smart-contract interaction.</dd></div>
+          <div><dt>Trading networks</dt><dd>Market data feeds, execution infrastructure, signals and monitoring for automated trading.</dd></div>
+          <div><dt>Editing</dt><dd>Video and motion editing, from short-form content to beat-synced promos.</dd></div>
+        </dl>
+        <div class="stack" aria-label="Technologies">
+          <span>Python</span><span>JavaScript</span><span>HTML and CSS</span><span>Java</span><span>C++</span>
+          <span>Discord API</span><span>REST APIs</span><span>LLM APIs</span><span>Git</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="projects">
+    <div class="wrap split">
+      <h2>Projects</h2>
+      <div>
+        <ul class="repos" id="repos"></ul>
+        <p class="repos-note" id="repos-note">Loading repositories from GitHub...</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" class="contact">
+    <div class="wrap split">
+      <h2>Contact</h2>
+      <div>
+        <p>Have a bot, agent or trading system in mind? Open a conversation and tell me what it needs to do.</p>
+        <div class="links">
+          <button class="btn primary" id="copy-discord" type="button" style="font: inherit; cursor: pointer;">Discord: cosmic.shrimp</button>
+          <a class="btn ghost" href="https://github.com/TheSerpentMaster" rel="noopener">GitHub</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>&copy; <span id="year">2026</span> TheSerpentMaster</span>
+    <span>Hosted on GitHub Pages</span>
+  </div>
+</footer>
+
+<script>
+  document.getElementById("year").textContent = new Date().getFullYear();
+
+  // Copy the Discord handle, since Discord has no public profile link by username.
+  (function () {
+    const btn = document.getElementById("copy-discord");
+    const label = btn.textContent;
+    btn.addEventListener("click", function () {
+      const done = function (msg) {
+        btn.textContent = msg;
+        setTimeout(function () { btn.textContent = label; }, 1800);
+      };
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText("cosmic.shrimp").then(function () { done("Copied. Send a friend request"); }, function () { done("Username: cosmic.shrimp"); });
+      } else {
+        done("Username: cosmic.shrimp");
+      }
+    });
+  })();
+
+  // Pull public repos from GitHub; the list stays empty with a link if the request fails.
+  (async function () {
+    const user = "TheSerpentMaster";
+    const list = document.getElementById("repos");
+    const note = document.getElementById("repos-note");
+    try {
+      const res = await fetch("https://api.github.com/users/" + user + "/repos?per_page=100&sort=updated");
+      if (!res.ok) throw new Error(res.status);
+      const repos = (await res.json())
+        .filter(function (r) {
+          const n = r.name.toLowerCase();
+          return n !== user.toLowerCase() && n !== user.toLowerCase() + ".github.io";
+        })
+        .sort(function (a, b) { return (b.stargazers_count - a.stargazers_count) || (new Date(b.pushed_at) - new Date(a.pushed_at)); })
+        .slice(0, 6);
+      if (!repos.length) { note.textContent = "No public repositories yet."; return; }
+      repos.forEach(function (r) {
+        const li = document.createElement("li");
+        const a = document.createElement("a");
+        a.href = r.html_url; a.rel = "noopener";
+        const name = document.createElement("span"); name.className = "name"; name.textContent = r.name;
+        const desc = document.createElement("span"); desc.className = "desc"; desc.textContent = r.description || "No description yet.";
+        const meta = document.createElement("span"); meta.className = "meta";
+        meta.textContent = [r.language, r.stargazers_count ? r.stargazers_count + " stars" : null].filter(Boolean).join(", ");
+        a.append(name, desc, meta);
+        li.appendChild(a);
+        list.appendChild(li);
+      });
+      note.innerHTML = 'More on <a href="https://github.com/' + user + '?tab=repositories" rel="noopener">GitHub</a>.';
+    } catch (e) {
+      note.innerHTML = 'Repositories could not be loaded. Browse them on <a href="https://github.com/' + user + '?tab=repositories" rel="noopener">GitHub</a>.';
+    }
+  })();
+</script>
 </body>
+</html>
