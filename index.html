@@ -159,7 +159,7 @@
   /* Repos, filled from the GitHub API */
   .repos { list-style: none; }
   .repos li { border-bottom: 1px solid var(--line); }
-  .repos a {
+  .repos a, .repos .row {
     display: grid;
     grid-template-columns: 1fr auto;
     gap: 0.25rem 1.5rem;
@@ -188,7 +188,8 @@
     <nav aria-label="Primary">
       <a href="#about">About</a>
       <a href="#work">Work</a>
-      <a href="#projects">Projects</a>
+      <a href="#projects">Builds</a>
+      <a href="#support">Support</a>
       <a href="#contact">Contact</a>
     </nav>
   </div>
@@ -243,10 +244,25 @@
 
   <section id="projects">
     <div class="wrap split">
-      <h2>Projects</h2>
+      <h2>Builds</h2>
       <div>
-        <ul class="repos" id="repos"></ul>
-        <p class="repos-note" id="repos-note">Loading repositories from GitHub...</p>
+        <ul class="repos">
+          <li><div class="row"><span class="name">Venom</span><span class="desc">Discord moderation bot that scores intent with an LLM, spots raids before they land and acts in milliseconds.</span><span class="meta">Concept</span></div></li>
+          <li><div class="row"><span class="name">Coil</span><span class="desc">Agent framework where specialized agents hand tasks to each other, with full tool-call tracing.</span><span class="meta">Concept</span></div></li>
+          <li><div class="row"><span class="name">Fangs</span><span class="desc">Low-latency signal relay that streams on-chain and exchange events into Discord and webhooks.</span><span class="meta">Concept</span></div></li>
+          <li><div class="row"><span class="name">Molt</span><span class="desc">Pipeline that cuts beat-synced trading videos from raw clips and a track, no timeline needed.</span><span class="meta">Concept</span></div></li>
+        </ul>
+        <p class="repos-note">Concepts I'm designing and building. Source for what ships goes on <a href="https://github.com/TheSerpentMaster?tab=repositories" rel="noopener">GitHub</a>.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="support">
+    <div class="wrap split">
+      <h2>Support my work</h2>
+      <div>
+        <p class="repos-note" style="max-width:30rem;margin-bottom:1.5rem;">If you like what I build, you can chip in with crypto. It goes straight into more bots, agents and tools.</p>
+        <iframe src="https://nowpayments.io/embeds/payment-widget?iid=5843691274" title="Crypto payment widget" width="410" height="696" frameborder="0" scrolling="no" loading="lazy" style="overflow-y: hidden; max-width: 100%; border: 0;">Can't load widget</iframe>
       </div>
     </div>
   </section>
@@ -290,40 +306,6 @@
         done("Username: cosmic.shrimp");
       }
     });
-  })();
-
-  // Pull public repos from GitHub; the list stays empty with a link if the request fails.
-  (async function () {
-    const user = "TheSerpentMaster";
-    const list = document.getElementById("repos");
-    const note = document.getElementById("repos-note");
-    try {
-      const res = await fetch("https://api.github.com/users/" + user + "/repos?per_page=100&sort=updated");
-      if (!res.ok) throw new Error(res.status);
-      const repos = (await res.json())
-        .filter(function (r) {
-          const n = r.name.toLowerCase();
-          return n !== user.toLowerCase() && n !== user.toLowerCase() + ".github.io";
-        })
-        .sort(function (a, b) { return (b.stargazers_count - a.stargazers_count) || (new Date(b.pushed_at) - new Date(a.pushed_at)); })
-        .slice(0, 6);
-      if (!repos.length) { note.textContent = "No public repositories yet."; return; }
-      repos.forEach(function (r) {
-        const li = document.createElement("li");
-        const a = document.createElement("a");
-        a.href = r.html_url; a.rel = "noopener";
-        const name = document.createElement("span"); name.className = "name"; name.textContent = r.name;
-        const desc = document.createElement("span"); desc.className = "desc"; desc.textContent = r.description || "No description yet.";
-        const meta = document.createElement("span"); meta.className = "meta";
-        meta.textContent = [r.language, r.stargazers_count ? r.stargazers_count + " stars" : null].filter(Boolean).join(", ");
-        a.append(name, desc, meta);
-        li.appendChild(a);
-        list.appendChild(li);
-      });
-      note.innerHTML = 'More on <a href="https://github.com/' + user + '?tab=repositories" rel="noopener">GitHub</a>.';
-    } catch (e) {
-      note.innerHTML = 'Repositories could not be loaded. Browse them on <a href="https://github.com/' + user + '?tab=repositories" rel="noopener">GitHub</a>.';
-    }
   })();
 </script>
 </body>
